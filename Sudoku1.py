@@ -8,6 +8,7 @@ for i in range(9):
 x = 0
 z = 0
 y = 0
+s = False
 def je_veljavna(stevilo , vrstica, stolpec):
     
         for i in range(9):
@@ -39,64 +40,18 @@ def je_veljavna(stevilo , vrstica, stolpec):
 
 
 
-def zapolni():
-    for i in range(9):
-        for j in range(9):
-            a[i][j] = 0
-    
-    y = 0
-    while y <10:
-        e = randint(1,9)
-        f = randint(0,8)
-        g = randint(0,8)
-        if(a[f][g] == 0):
-            if(je_veljavna(e,f,g) == True):
-                a[f][g] = e
-                y += 1
-    return a
-
-def dopolni():
-   y =  0
-   while y < 1:
-        e = randint(1,9)
-        f = randint(0,8)
-        g = randint(0,8)
-        if(a[f][g] == 0):
-            if(je_veljavna(e,f,g) == True):
-                a[f][g] = e
-                y += 1
-   return a
-    
-def resitelj1(vrstica, stolpec,y = 0):
-        if((vrstica == 8) and (stolpec == 9)):
-            y += 1
-            print(a)
-            return a
-            
-        elif(stolpec == 9):
-            stolpec = 0
-            vrstica += 1
-
-        if(a[vrstica][stolpec] != 0):
-             resitelj1(vrstica,stolpec+1,y)
-        else:
-            for i in range(1,10):
-                if(je_veljavna(i, vrstica, stolpec) == True):
-                    a[vrstica][stolpec] = i
-                    resitelj1(vrstica, stolpec+1,y)
 
 
-            a[vrstica][stolpec] = 0
-
-
-
-def resitelj3(vrstica, stolpec,s = False):
+def resitelj3(vrstica, stolpec):
+        global s
         if(s == True):
             sys.exit
+            return
         if((vrstica == 8) and (stolpec == 9)):
                 s = True
                 sys.exit()
-                return 
+                
+                 
             
             
         elif(stolpec == 9):
@@ -106,46 +61,27 @@ def resitelj3(vrstica, stolpec,s = False):
         if(a[vrstica][stolpec] != 0):
              if(s == True):
                  sys.exit
-             resitelj1(vrstica,stolpec+1,s)
+                 return
+             resitelj3(vrstica,stolpec+1)
         else:
             for i in range(1,10):
                 if(je_veljavna(i, vrstica, stolpec) == True):
                     if(s == True):
                         sys.exit
+                        return
                     a[vrstica][stolpec] = i
-                    resitelj3(vrstica, stolpec+1,s)
+                    resitelj3(vrstica, stolpec+1)
 
 
             a[vrstica][stolpec] = 0
 
         if(s == True):
             sys.exit
-
-
-            
-            
-
-def resitelj2(vrstica, stolpec):
-        if((vrstica == 8) and (stolpec == 9)):
-            global z
-            z += 1
-            print(z,0)
             return
 
-        elif(stolpec == 9):
-            stolpec = 0
-            vrstica += 1
 
-        if(a[vrstica][stolpec] != 0):
-             resitelj2(vrstica,stolpec+1)
-        else:
-            for i in range(1,10):
-                if(je_veljavna(i, vrstica, stolpec) == True):
-                    a[vrstica][stolpec] = i
-                    resitelj2(vrstica, stolpec+1)
-
-
-            a[vrstica][stolpec] = 0
+            
+            
 
 
 def resitelj4(vrstica, stolpec):
@@ -160,12 +96,12 @@ def resitelj4(vrstica, stolpec):
             vrstica += 1
 
         if(a[vrstica][stolpec] != 0):
-             resitelj2(vrstica,stolpec+1)
+             resitelj4(vrstica,stolpec+1)
         else:
             for i in range(1,10):
                 if(je_veljavna(i, vrstica, stolpec) == True):
                     tabela2[vrstica][stolpec] = i
-                    resitelj2(vrstica, stolpec+1)
+                    resitelj4(vrstica, stolpec+1)
 
 
             tabela2[vrstica][stolpec] = 0
@@ -188,25 +124,34 @@ def napolni():
 
 
 
+def vrstica(a):
+    f = 0
+    while f < 9:
+        t = randint(1,9)
+        if(je_veljavna(t,0,f) == True):
+            a[0][f] =t
+            f += 1
+
+    return a
+
+
+def prva():
+
+    x = 0
+    z = 0
+    y = 0
+    s = False
+    print(x)
     
+    vrstica(a)
+    print(x)
+    resitelj3(0,0)
+    print(a)
+
+
+
     
-def main():
-    while True:
-        global z
-        z = 0
-        zapolni()
-        resitelj2(0,0)
-        print(z)
-        if(z > 1):
-            dopolni()
-            z = 0
-            resitelj2(0,0)
-            print(z)
-        if(z == 1):
-            return a
-            print(a)
-        else:
-            z = 0
+
             
 
 def main2():
@@ -217,10 +162,29 @@ def main2():
         resitelj4(0,0)
         print(z)
         if(z == 1):
-            return a
+            return [a,tabela2]
             print(tabela2)
         else:
             z = 0
+        
+
+def pisatelj(c):
+    with open('text.txt','w') as f:
+        for i in c:
+            h = str(i).strip(',')
+            h = h.replace(',','')
+            h = h.replace(' ','')
+            print(h[1:len(h)-2],file=f)
+        
+
+
+
+
+prva()
+
+m = main2()
+pisatelj(m[1])
+
         
         
 
