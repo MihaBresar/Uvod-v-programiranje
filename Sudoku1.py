@@ -1,5 +1,5 @@
+from tkinter import *
 from random import randint
-import sys
 a = []
 tabela2 = []
 for i in range(9):
@@ -45,11 +45,10 @@ def je_veljavna(stevilo , vrstica, stolpec):
 def resitelj3(vrstica, stolpec):
         global s
         if(s == True):
-            sys.exit
             return
         if((vrstica == 8) and (stolpec == 9)):
-                s = True
-                sys.exit()
+            s = True
+            return
                 
                  
             
@@ -59,25 +58,20 @@ def resitelj3(vrstica, stolpec):
             vrstica += 1
         
         if(a[vrstica][stolpec] != 0):
-             if(s == True):
-                 sys.exit
-                 return
              resitelj3(vrstica,stolpec+1)
+             if(s == True):
+                 return
         else:
             for i in range(1,10):
                 if(je_veljavna(i, vrstica, stolpec) == True):
-                    if(s == True):
-                        sys.exit
-                        return
                     a[vrstica][stolpec] = i
                     resitelj3(vrstica, stolpec+1)
+                    if(s == True):
+                        return
 
 
             a[vrstica][stolpec] = 0
 
-        if(s == True):
-            sys.exit
-            return
 
 
             
@@ -129,7 +123,7 @@ def vrstica(a):
     while f < 9:
         t = randint(1,9)
         if(je_veljavna(t,0,f) == True):
-            a[0][f] =t
+            a[0][f] = t
             f += 1
 
     return a
@@ -155,6 +149,7 @@ def prva():
             
 
 def main2():
+    prva()
     while True:
         global z
         napolni()
@@ -166,24 +161,105 @@ def main2():
             print(tabela2)
         else:
             z = 0
-        
-
-def pisatelj(c):
-    with open('text.txt','w') as f:
-        for i in c:
-            h = str(i).strip(',')
-            h = h.replace(',','')
-            h = h.replace(' ','')
-            print(h[1:len(h)-2],file=f)
-        
-
-
-
-
-prva()
 
 m = main2()
-pisatelj(m[1])
+
+    ###[ DISPLAY ]###
+a = m[0]
+b = m[1]
+
+
+
+class aCase:
+        def __init__(self, root, r, c):
+            self.vrednost = StringVar()
+            self.vhod = Entry(root, textvariable=self.vrednost, width=5)
+            if(r<4) and (c<3 or c>5):
+                self.vhod = Entry(root, textvariable=self.vrednost, width=5,bg='orange')
+            elif((r>6) and (c<3 or c>5)):
+                self.vhod = Entry(root, textvariable=self.vrednost, width=5,bg='orange')
+            elif(r<7 and r>3) and (c>2 and c<6):
+                self.vhod = Entry(root, textvariable=self.vrednost, width=5,bg='orange')
+            else:
+                self.vhod = Entry(root, textvariable=self.vrednost, width=5)
+            self.vhod.grid(row=r, column=c)
+            
+                
+            
+
+        def getValue(self):
+            if self.vhod.get()=='' or int(self.vhod.get())<1 or int(self.vhod.get())>9:
+                return 0
+
+            return int(self.vhod.get())
+
+        def putValue(self, v):
+            self.vrednost.set(v)
+
+class Application(Tk):
+        def __init__(self):
+            self.root = Tk()
+            self.root.title('Solver Sudoku')
+
+            self.solve = Button(self.root, text="Resi", command=self.SolveMe)
+            self.quitt = Button(self.root, text="Koncaj", command=self.OutMe)
+            self.newpl = Button(self.root, text='Zacni', command=self.newp)
+            self.preveri = Button(self.root, text='Preveri',command=self.testy)
+            
+            self.preveri.grid(row=10,column=7,columnspan=6)
+            self.solve.grid(row=10, column=0,columnspan=3)
+            self.quitt.grid(row=10, column=2,columnspan=3)
+            self.newpl.grid(row=10, column=4,columnspan=4)
+            
+            
+            self.case = []
+            for i in range(9):
+                for j in range(9):
+                    self.case += [aCase(self.root, i+1, j)]
+
+        def OutMe(self):
+            del(self.case)
+            self.root.destroy()
+            self.root.quit()
+        
+        def newp(self):
+            for i in range(81):
+                    if(b[int(i/9)][i%9] != 0):
+                        self.case[i].putValue(b[int(i/9)][i%9])
+                
+        def SolveMe(self):
+            for i in range(81):
+                if(a[int(i/9)][i%9] != 0):
+                    self.case[i].putValue(a[int(i/9)][i%9])
+                else:
+                    self.case[i]=0
+        
+        def testy(self):
+            for i in range(81):
+                if self.case[i].getValue() != a[int(i/9)][i%9]:
+                        top = Toplevel()
+                        msg = Message(top, text='Vaša rešitev ima napako')
+                        msg.pack()
+                        button = Button(top, text="Nazaj", command=top.destroy)
+                        button.pack()
+                        return
+                          
+            top = Toplevel()
+            sg = Message(top, text='Vaša rešitev je pravilna')
+            sg.pack()
+
+            button = Button(top, text="Nazaj", command=top.destroy)
+            button.pack()
+                
+
+            
+    ###[ RESOLUTION ]###
+
+
+
+app = Application()
+app.root.mainloop()
+
 
         
         
