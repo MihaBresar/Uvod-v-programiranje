@@ -1,5 +1,10 @@
 from tkinter import *
 from random import randint
+
+#***************************************************************************************
+#Funkcija ki ustvari sudoku in vrne dve tabeli. Prva je naključno generiran sudoku, druga pa njegova rešena verzija
+#**********************************************************************************************
+
 a = []
 tabela2 = []
 for i in range(9):
@@ -164,12 +169,14 @@ def main2():
 
 m = main2()
 
-    ###[ DISPLAY ]###
+    
 a = m[0]
 b = m[1]
 
 
-
+#***************************************************************************************************************************
+#Grafični vmesik
+#**************************************************************************************************************************
 class aCase:
         def __init__(self, root, r, c):
             self.vrednost = StringVar()
@@ -253,16 +260,13 @@ class Application(Tk):
                 
 
             
-    ###[ RESOLUTION ]###
+
 
 
 
 app = Application()
 app.root.mainloop()
 
-
-        
-        
 
 
 
