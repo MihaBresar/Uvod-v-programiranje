@@ -1,8 +1,9 @@
+
 from tkinter import *
 from random import randint
 
 #***************************************************************************************
-#Funkcija ki ustvari sudoku in vrne dve tabeli. Prva je naključno generiran sudoku, druga pa njegova rešena verzija
+#Funkcija ki ustvari sudoku in vrne dve tabeli. Prva je naključno generiran sudoku. Druga pa njegova rešena verzija.
 #**********************************************************************************************
 
 a = []
@@ -125,6 +126,9 @@ def napolni():
 
 def vrstica(a):
     f = 0
+    for i in range(9):
+        for j in range(9):
+            a[i][j]  = 0
     while f < 9:
         t = randint(1,9)
         if(je_veljavna(t,0,f) == True):
@@ -134,7 +138,7 @@ def vrstica(a):
     return a
 
 
-def prva():
+def main1():
 
     x = 0
     z = 0
@@ -143,18 +147,15 @@ def prva():
     print(x)
     
     vrstica(a)
-    print(x)
+    print(a)
     resitelj3(0,0)
     print(a)
-
-
-
-    
-
-            
+           
 
 def main2():
-    prva()
+    global s
+    s = False
+    main1()
     while True:
         global z
         napolni()
@@ -166,7 +167,6 @@ def main2():
             print(tabela2)
         else:
             z = 0
-
 m = main2()
 
     
@@ -174,10 +174,11 @@ a = m[0]
 b = m[1]
 
 
+
 #***************************************************************************************************************************
 #Grafični vmesik
 #**************************************************************************************************************************
-class aCase:
+class Celica:
         def __init__(self, root, r, c):
             self.vrednost = StringVar()
             self.vhod = Entry(root, textvariable=self.vrednost, width=5)
@@ -206,12 +207,12 @@ class aCase:
 class Application(Tk):
         def __init__(self):
             self.root = Tk()
-            self.root.title('Solver Sudoku')
+            self.root.title('Igra Sudoku')
 
             self.solve = Button(self.root, text="Resi", command=self.SolveMe)
             self.quitt = Button(self.root, text="Koncaj", command=self.OutMe)
             self.newpl = Button(self.root, text='Zacni', command=self.newp)
-            self.preveri = Button(self.root, text='Preveri',command=self.testy)
+            self.preveri = Button(self.root, text='Preveri',command=self.preveri)
             
             self.preveri.grid(row=10,column=7,columnspan=6)
             self.solve.grid(row=10, column=0,columnspan=3)
@@ -222,12 +223,16 @@ class Application(Tk):
             self.case = []
             for i in range(9):
                 for j in range(9):
-                    self.case += [aCase(self.root, i+1, j)]
+                    self.case += [Celica(self.root, i+1, j)]
 
         def OutMe(self):
-            del(self.case)
-            self.root.destroy()
-            self.root.quit()
+            global a
+            global b
+            m = main2()
+            a = m[0]
+            b = m[1]
+            for i in range(81):
+                self.case[i].putValue('')
         
         def newp(self):
             for i in range(81):
@@ -241,7 +246,7 @@ class Application(Tk):
                 else:
                     self.case[i]=0
         
-        def testy(self):
+        def preveri(self):
             for i in range(81):
                 if self.case[i].getValue() != a[int(i/9)][i%9]:
                         top = Toplevel()
