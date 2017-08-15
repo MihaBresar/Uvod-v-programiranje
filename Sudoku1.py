@@ -43,7 +43,7 @@ def je_veljavna(stevilo, vrstica, stolpec):
 
 def resi_sudoku(vrstica, stolpec):
     global s
-    if s == True:
+    if s:
         return
     if vrstica == 8 and stolpec == 9:
         s = True
@@ -55,14 +55,14 @@ def resi_sudoku(vrstica, stolpec):
 
     if resen_sudoku[vrstica][stolpec] != 0:
         resi_sudoku(vrstica, stolpec + 1)
-        if s == True:
+        if s:
             return
     else:
         for i in range(1, 10):
-            if je_veljavna(i, vrstica, stolpec) == True:
+            if je_veljavna(i, vrstica, stolpec):
                 resen_sudoku[vrstica][stolpec] = i
                 resi_sudoku(vrstica, stolpec + 1)
-                if s == True:
+                if s:
                     return
 
         resen_sudoku[vrstica][stolpec] = 0
@@ -83,7 +83,7 @@ def resitelj4(vrstica, stolpec):
         resitelj4(vrstica, stolpec + 1)
     else:
         for i in range(1, 10):
-            if je_veljavna(i, vrstica, stolpec) == True:
+            if je_veljavna(i, vrstica, stolpec):
                 sudoku1[vrstica][stolpec] = i
                 resitelj4(vrstica, stolpec + 1)
 
@@ -91,7 +91,7 @@ def resitelj4(vrstica, stolpec):
 
 
 def napolni():
-    # v prazno tabelo dodamo 30 števil 
+    # v prazno tabelo dodamo 30 števil
     for i in range(9):
         for j in range(9):
             sudoku1[i][j] = 0
@@ -114,7 +114,7 @@ def vrstica(resen_sudoku):
             resen_sudoku[i][j] = 0
     while f < 9:
         t = randint(1, 9)
-        if je_veljavna(t, 0, f) == True:
+        if je_veljavna(t, 0, f):
             resen_sudoku[0][f] = t
             f += 1
 
@@ -122,7 +122,8 @@ def vrstica(resen_sudoku):
 
 
 def main1():
-    # ustvari nakljucen sudoku, tako da nakljucno permutira prvo vrstico. Potem pa dano tabelo resi s pomocjo resi_sudoku
+    # Ustvari nakljucen sudoku, tako da nakljucno permutira prvo vrstico.
+    # Potem pa dano tabelo resi s pomocjo resi_sudoku
     x = 0
     z = 0
     y = 0
@@ -133,7 +134,9 @@ def main1():
 
 
 def main2():
-    # s funkcijo main1 smo dobili resen 9x9 sudoku. Sedaj v prazno tabelo dodamo 30 elementov, èe ima dana tabela enolicno esitev smo koncali. Ce tabela nima enolicne resitve postopek ponovimo
+    # Funkcijo main1 ustvari resen 9x9 sudoku.
+    # Sedaj v prazno tabelo dodamo 30 elementov, ce ima dana tabela enolicno esitev smo koncali.
+    # Ce tabela nima enolicne resitve postopek ponovimo
     global s
     s = False
     main1()
@@ -188,10 +191,8 @@ class Application(Tk):
         self.root = Tk()
         self.root.title('Igra Sudoku')
 
-        self.resi = Button(self.root, text='Resi',
-                            command=self.resi_me)
-        self.nova = Button(self.root, text='Nova igra',
-                            command=self.nova_igra)
+        self.resi = Button(self.root, text='Resi', command=self.resi_me)
+        self.nova = Button(self.root, text='Nova igra', command=self.nova_igra)
         self.zacni = Button(self.root, text='Zacni', command=self.zacetek)
         self.preveri = Button(self.root, text='Preveri',
                               command=self.preveri)
