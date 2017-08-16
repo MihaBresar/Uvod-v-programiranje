@@ -68,7 +68,7 @@ def resi_sudoku(vrstica, stolpec):
         resen_sudoku[vrstica][stolpec] = 0
 
 
-def resitelj4(vrstica, stolpec):
+def stevilo_resitev(vrstica, stolpec):
     if vrstica == 8 and stolpec == 9:
         global z
         z += 1
@@ -80,12 +80,12 @@ def resitelj4(vrstica, stolpec):
         vrstica += 1
 
     if resen_sudoku[vrstica][stolpec] != 0:
-        resitelj4(vrstica, stolpec + 1)
+        stevilo_resitev(vrstica, stolpec + 1)
     else:
         for i in range(1, 10):
             if je_veljavna(i, vrstica, stolpec):
                 sudoku1[vrstica][stolpec] = i
-                resitelj4(vrstica, stolpec + 1)
+                stevilo_resitev(vrstica, stolpec + 1)
 
         sudoku1[vrstica][stolpec] = 0
 
@@ -143,7 +143,7 @@ def main2():
     while True:
         global z
         napolni()
-        resitelj4(0, 0)
+        stevilo_resitev(0, 0)
         if z == 1:
             return [resen_sudoku, sudoku1]
         else:
